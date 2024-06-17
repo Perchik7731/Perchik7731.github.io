@@ -5,27 +5,18 @@ tg.expand();
 tg.MainButton.textColor = '#FFFFFF';
 tg.MainButton.color = '#2cab37';
 
-let item = "";
+// Ensure tg.initDataUnsafe.user is defined and not null
+if (tg.initDataUnsafe.user) {
+    let userFullName = `${tg.initDataUnsafe.user.first_name} ${tg.initDataUnsafe.user.last_name}`;
+    let userId = `ID: ${tg.initDataUnsafe.user.id}`;
 
-// Event listeners for each button
-let buttons = [btn1, btn2, btn3, btn4, btn5, btn6];
-buttons.forEach((btn, index) => {
-    btn.addEventListener("click", function(){
-        if (tg.MainButton.isVisible) {
-            tg.MainButton.hide();
-        } else {
-            tg.MainButton.setText(`Вы выбрали товар ${index + 1}!`);
-            item = `${index + 1}`;
-            tg.MainButton.show();
-        }
-    });
-});
-
-// Function to handle mainButtonClicked event
-Telegram.WebApp.onEvent("mainButtonClicked", function(){
-    tg.sendData(item);
-});
-
-// Display user's name
-let username = document.getElementById("username");
-username.innerText = `Ваше имя: "${tg.initDataUnsafe.user.first_name}"`;
+    let userinfo = document.getElementById("userinfo");
+    userinfo.innerHTML = `
+        <p>${userFullName}</p>
+        <p>${userId}</p>
+    `;
+} else {
+    // Fallback if user information is not available
+    let userinfo = document.getElementById("userinfo");
+    userinfo.textContent = "User information not available";
+}
